@@ -1,5 +1,5 @@
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env) {
     const url = new URL(request.url);
 
     if (url.pathname === "/decode") {
@@ -8,18 +8,13 @@ export default {
       if (!token) {
         return new Response(
           JSON.stringify(
-            {
-              success: false,
-              error: "Missing token"
-            },
+            { success: false, error: "Missing token" },
             null,
             2
           ),
           {
             status: 400,
-            headers: {
-              "content-type": "application/json; charset=UTF-8"
-            }
+            headers: { "content-type": "application/json; charset=UTF-8" }
           }
         );
       }
@@ -35,41 +30,30 @@ export default {
               authorizationFingerprint: json.authorizationFingerprint || null,
               merchantId: json.merchantId || null,
               environment: json.environment || null,
-              configUrl: json.configUrl || null,
-              clientApiUrl: json.clientApiUrl || null,
-              graphQL: json.graphQL || null,
-              paypal: json.paypal || null,
               decoded: json
             },
             null,
             2
           ),
           {
-            headers: {
-              "content-type": "application/json; charset=UTF-8"
-            }
+            headers: { "content-type": "application/json; charset=UTF-8" }
           }
         );
       } catch (e) {
         return new Response(
           JSON.stringify(
-            {
-              success: false,
-              error: String(e.message || e)
-            },
+            { success: false, error: String(e.message || e) },
             null,
             2
           ),
           {
             status: 400,
-            headers: {
-              "content-type": "application/json; charset=UTF-8"
-            }
+            headers: { "content-type": "application/json; charset=UTF-8" }
           }
         );
       }
     }
 
-    return fetch(request);
+    return env.ASSETS.fetch(request);
   }
 };
